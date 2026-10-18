@@ -33,3 +33,6 @@ release/
 # Environment/secrets
 .env
 .env.*
+
+# Misc
+docs/todo/

@@ -13,11 +13,46 @@ const path = require('node:path');
  * Bundled samples are NOT workspace projects — they live in the frontend.
  */
 
+/**
+ * Canonicalize a path through symlinks/junctions when it (or its nearest
+ * existing ancestor) exists. For paths that do not exist yet (Save As
+ * targets), the closest existing ancestor is canonicalized and the
+ * not-yet-existing tail is re-appended, so a new path cannot smuggle an
+ * escape through a dangling or nested symlink.
+ */
+function canonicalizePath(candidate) {
+  let resolved = path.resolve(candidate);
+  const missing = [];
+  while (!fs.existsSync(resolved)) {
+    missing.unshift(path.basename(resolved));
+    const parent = path.dirname(resolved);
+    if (parent === resolved) break; // reached the filesystem root
+    resolved = parent;
+  }
+  try {
+    resolved = fs.realpathSync(resolved);
+  } catch {
+    // If realpath fails for any reason, keep the lexically resolved form;
+    // the containment check below still applies.
+  }
+  return missing.length > 0 ? path.join(resolved, ...missing) : resolved;
+}
+
+/**
+ * Workspace containment check using canonical (real) paths, so a symlink or
+ * junction inside the workspace that points outside the workspace is
+ * rejected.
+ */
 function isDirUnderWorkspace(workspacePath, candidate) {
   if (!workspacePath || !candidate) return false;
-  const resolved = path.resolve(candidate);
-  const relative = path.relative(path.resolve(workspacePath), resolved);
-  return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
+  const workspaceReal = canonicalizePath(workspacePath);
+  const candidateReal = canonicalizePath(candidate);
+  const relative = path.relative(workspaceReal, candidateReal);
+  if (relative === '') return true;
+  // Reject pure parent traversal ('..' or '../…') without falsely rejecting
+  // sibling-looking names such as '..hidden' on platforms that allow them.
+  if (relative === '..' || relative.startsWith(`..${path.sep}`)) return false;
+  return !path.isAbsolute(relative);
 }
 
 function cleanupCorruptKeys(value) {

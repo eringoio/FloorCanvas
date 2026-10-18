@@ -17,9 +17,35 @@ import { ensureValidProject } from '../utils/projectValidation';
 
 export type SaveMethod = 'workspace' | 'fs-access' | 'download';
 
-export interface SaveResult {
-  handle: ProjectHandle | null;
-  method: SaveMethod;
+/**
+ * Explicit result of a save attempt so callers can distinguish success,
+ * user cancellation, and failure:
+ * - `saved` — data was persisted; update the handle and clear dirty state.
+ * - `cancelled` — the user dismissed an OS/browser save dialog; nothing was
+ *   written and dirty state must be left unchanged.
+ * - `failed` — persistence rejected the write; nothing was written, dirty
+ *   state must be left unchanged, and the error should be surfaced.
+ */
+export type SaveOutcome =
+  | { status: 'saved'; handle: ProjectHandle | null; method: SaveMethod }
+  | { status: 'cancelled'; handle: null; method: SaveMethod | null }
+  | { status: 'failed'; handle: null; method: SaveMethod | null; error: unknown };
+
+/**
+ * A handle counts as an existing desktop workspace project only when it
+ * carries a usable workspace-backed folder/project path. Built-in samples
+ * use a synthetic handle (empty paths, `isSample: true`) that is truthy but
+ * must NOT take the normal overwrite-save path.
+ */
+export function isWorkspaceProjectHandle(handle: ProjectHandle | null | undefined): boolean {
+  return (
+    !!handle &&
+    !handle.isSample &&
+    typeof handle.folderPath === 'string' &&
+    handle.folderPath !== '' &&
+    typeof handle.projectPath === 'string' &&
+    handle.projectPath !== ''
+  );
 }
 
 export interface OpenResult {
@@ -85,18 +111,28 @@ const fsAccessFileNameFor = (project: Project): string =>
 // Save
 // ---------------------------------------------------------------------------
 
-export async function saveProject(project: Project, handle: ProjectHandle | null): Promise<SaveResult> {
+export async function saveProject(project: Project, handle: ProjectHandle | null): Promise<SaveOutcome> {
   const projectData = serializeProject(project);
 
-  // 1. Desktop: direct overwrite of the known workspace project.
+  // 1. Desktop: direct overwrite of a known, workspace-backed project.
+  //    Synthetic sample handles and never-saved projects fall through to
+  //    Save As below, so the first Save always creates a real workspace
+  //    project folder.
   const desktop = window.floorcanvasDesktop;
-  if (desktop?.saveProject && handle) {
-    const updatedHandle = await desktop.saveProject(handle as any, projectData as any);
-    return { handle: updatedHandle as unknown as ProjectHandle, method: 'workspace' };
+  if (desktop?.saveProject && isWorkspaceProjectHandle(handle)) {
+    try {
+      const updatedHandle = await desktop.saveProject(handle as any, projectData as any);
+      if (!updatedHandle) {
+        return { status: 'cancelled', handle: null, method: 'workspace' };
+      }
+      return { handle: updatedHandle as unknown as ProjectHandle, method: 'workspace', status: 'saved' };
+    } catch (err) {
+      return { status: 'failed', handle: null, method: 'workspace', error: err };
+    }
   }
 
-  // 2. Desktop with unsaved/sample project: first Save creates a workspace
-  //    project (folder-per-project) instead of downloading.
+  // 2. Desktop with new/unsaved/sample project: first Save creates a
+  //    workspace project (folder-per-project) instead of downloading.
   if (desktop?.saveProjectAs) {
     return saveProjectAs(project, handle);
   }
@@ -105,16 +141,21 @@ export async function saveProject(project: Project, handle: ProjectHandle | null
   if (currentFsHandle) {
     const permitted = await requestWritePermission(currentFsHandle);
     if (permitted) {
-      await writeThroughFsHandle(currentFsHandle, projectData);
-      return {
-        handle: {
-          id: currentFsHandle.name,
-          folderPath: '',
-          projectPath: currentFsHandle.name,
-          title: project.title || currentFsHandle.name,
-        },
-        method: 'fs-access',
-      };
+      try {
+        await writeThroughFsHandle(currentFsHandle, projectData);
+        return {
+          status: 'saved',
+          handle: {
+            id: currentFsHandle.name,
+            folderPath: '',
+            projectPath: currentFsHandle.name,
+            title: project.title || currentFsHandle.name,
+          },
+          method: 'fs-access',
+        };
+      } catch (err) {
+        return { status: 'failed', handle: null, method: 'fs-access', error: err };
+      }
     }
     currentFsHandle = null;
   }
@@ -123,16 +164,23 @@ export async function saveProject(project: Project, handle: ProjectHandle | null
   return saveProjectAs(project, handle);
 }
 
-export async function saveProjectAs(project: Project, handle: ProjectHandle | null): Promise<SaveResult> {
+export async function saveProjectAs(project: Project, handle: ProjectHandle | null): Promise<SaveOutcome> {
   const projectData = serializeProject(project);
 
   // 1. Desktop: create a new workspace project.
   const desktop = window.floorcanvasDesktop;
   if (desktop?.saveProjectAs) {
-    const suggestedName = project.title || 'untitled';
-    const sourcePath = handle?.folderPath || null;
-    const newHandle = await desktop.saveProjectAs(projectData as any, suggestedName, sourcePath);
-    return { handle: newHandle as unknown as ProjectHandle, method: 'workspace' };
+    try {
+      const suggestedName = project.title || 'untitled';
+      const sourcePath = handle?.folderPath || null;
+      const newHandle = await desktop.saveProjectAs(projectData as any, suggestedName, sourcePath);
+      if (!newHandle) {
+        return { status: 'cancelled', handle: null, method: 'workspace' };
+      }
+      return { status: 'saved', handle: newHandle as unknown as ProjectHandle, method: 'workspace' };
+    } catch (err) {
+      return { status: 'failed', handle: null, method: 'workspace', error: err };
+    }
   }
 
   // 2. File System Access: save file picker.
@@ -147,6 +195,7 @@ export async function saveProjectAs(project: Project, handle: ProjectHandle | nu
       await writable.close();
       currentFsHandle = handleNew;
       return {
+        status: 'saved',
         handle: {
           id: handleNew.name,
           folderPath: '',
@@ -156,14 +205,21 @@ export async function saveProjectAs(project: Project, handle: ProjectHandle | nu
         method: 'fs-access',
       };
     } catch (err: any) {
-      if (err && err.name === 'AbortError') return { handle: null, method: 'fs-access' };
+      if (err && err.name === 'AbortError') {
+        return { status: 'cancelled', handle: null, method: 'fs-access' };
+      }
       // Permission/API rejection: fall through to download.
     }
   }
 
-  // 4. Universal fallback: download .floormap.json.
-  downloadProjectJson(projectData);
+  // 3. Universal fallback: download .floormap.json.
+  try {
+    downloadProjectJson(projectData);
+  } catch (err) {
+    return { status: 'failed', handle: null, method: 'download', error: err };
+  }
   return {
+    status: 'saved',
     handle: {
       id: fsAccessFileNameFor(project),
       folderPath: '',

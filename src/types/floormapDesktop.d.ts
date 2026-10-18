@@ -5,6 +5,8 @@ export interface ProjectHandle {
   folderPath: string;
   projectPath: string;
   title: string;
+  /** True for synthetic built-in sample handles (no backing file). */
+  isSample?: boolean;
 }
 
 export interface ProjectListItem {

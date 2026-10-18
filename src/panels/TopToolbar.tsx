@@ -8,6 +8,8 @@ import { HelpModal } from '../components/HelpModal';
 import { ImportMergeModal } from '../components/ImportMergeModal';
 import { BUILTIN_SAMPLES, findBuiltinSample, loadBuiltinSampleProject, builtinSampleHandle } from '../data/sampleCatalog';
 import * as projectFileService from '../services/projectFileService';
+import type { SaveOutcome } from '../services/projectFileService';
+import { ensureValidProject } from '../utils/projectValidation';
 
 export const TopToolbar: React.FC = () => {
   const { t } = useI18n();
@@ -86,30 +88,37 @@ export const TopToolbar: React.FC = () => {
     createNewProject();
   };
 
-  const handleSaveAs = React.useCallback(async () => {
-    try {
-      const result = await projectFileService.saveProjectAs(project, currentProjectHandle);
-      if (result.handle) {
-        setProjectHandle(result.handle);
-        setDirty(false);
-        refreshProjectsList();
+  const handleSaveAs = React.useCallback(async (): Promise<SaveOutcome> => {
+    const outcome = await projectFileService.saveProjectAs(project, currentProjectHandle);
+    if (outcome.status === 'saved') {
+      // Only a successful persistence clears dirty state; a cancelled or
+      // failed save leaves everything unchanged.
+      if (outcome.handle) {
+        setProjectHandle(outcome.handle);
       }
-    } catch (err: any) {
-      alert('Failed to save project: ' + err.message);
-    }
-  }, [project, currentProjectHandle, refreshProjectsList, setDirty, setProjectHandle]);
-
-  const handleSave = React.useCallback(async () => {
-    try {
-      // Desktop workspaces: direct overwrite (no confirmation). Samples and
-      // browser projects follow the Save As / download fallback chain.
-      await projectFileService.saveProject(project, currentProjectHandle);
       setDirty(false);
       refreshProjectsList();
-    } catch (err: any) {
-      alert(t('toolbar.saveFailed').replace('{error}', String(err)) || 'Failed to save project: ' + err);
+    } else if (outcome.status === 'failed') {
+      alert(t('toolbar.saveFailed').replace('{error}', String(outcome.error)) || 'Failed to save project: ' + outcome.error);
     }
-  }, [project, currentProjectHandle, refreshProjectsList, setDirty, t]);
+    return outcome;
+  }, [project, currentProjectHandle, refreshProjectsList, setDirty, setProjectHandle, t]);
+
+  const handleSave = React.useCallback(async (): Promise<SaveOutcome> => {
+    const outcome = await projectFileService.saveProject(project, currentProjectHandle);
+    if (outcome.status === 'saved') {
+      // Store the handle returned by the save (first Save creates the
+      // workspace project; later Saves overwrite the same project).
+      if (outcome.handle) {
+        setProjectHandle(outcome.handle);
+      }
+      setDirty(false);
+      refreshProjectsList();
+    } else if (outcome.status === 'failed') {
+      alert(t('toolbar.saveFailed').replace('{error}', String(outcome.error)) || 'Failed to save project: ' + outcome.error);
+    }
+    return outcome;
+  }, [project, currentProjectHandle, refreshProjectsList, setDirty, setProjectHandle, t]);
 
   React.useEffect(() => {
     const handleAppSaveEvent = () => {
@@ -175,14 +184,7 @@ export const TopToolbar: React.FC = () => {
     reader.onload = (event) => {
       try {
         const text = event.target?.result as string;
-        const parsed = JSON.parse(text);
-
-        if (!parsed || typeof parsed !== 'object') {
-          throw new Error('Not a valid JSON object');
-        }
-        if (!Array.isArray(parsed.objects)) {
-          throw new Error('Missing objects array');
-        }
+        const parsed = ensureValidProject(JSON.parse(text));
 
         setImportData(parsed);
         setIsImportModalOpen(true);
@@ -226,12 +228,18 @@ export const TopToolbar: React.FC = () => {
 
   // Dev/testing helper: auto-load a built-in sample or workspace project via
   // `?sample=<id>` query param so headless screenshot/export tooling can
-  // target a specific plan.
+  // target a specific plan. Runs at most once per page load: the effect
+  // depends on the workspace projects list (needed to resolve workspace
+  // project ids), and without a guard each list refresh would re-trigger it
+  // and reload the sample in a loop.
+  const autoLoadedSampleRef = React.useRef(false);
   React.useEffect(() => {
+    if (autoLoadedSampleRef.current) return;
     const params = new URLSearchParams(window.location.search);
     const sampleId = params.get('sample');
     if (!sampleId) return;
     if (findBuiltinSample(sampleId)) {
+      autoLoadedSampleRef.current = true;
       const loadBuiltIn = async () => {
         try {
           loadProject(loadBuiltinSampleProject(sampleId));
@@ -248,6 +256,7 @@ export const TopToolbar: React.FC = () => {
     if (projectsList.length === 0) return;
     const projectItem = projectsList.find((p) => p.id === sampleId);
     if (projectItem) {
+      autoLoadedSampleRef.current = true;
       const loadProjectFromList = async () => {
         try {
           const result = await projectFileService.openWorkspaceProject(projectItem.id);
@@ -674,9 +683,14 @@ export const TopToolbar: React.FC = () => {
               <button
                 className="toolbar-btn"
                 onClick={async () => {
-                  setIsClosePromptOpen(false);
-                  await handleSave();
-                  await window.floorcanvasDesktop?.acceptClose?.();
+                  // Only accept the close when the save actually succeeded.
+                  // A cancelled or failed save keeps the app (and this
+                  // dialog) open so the user can retry, Don't Save, or Cancel.
+                  const outcome = await handleSave();
+                  if (outcome.status === 'saved') {
+                    setIsClosePromptOpen(false);
+                    await window.floorcanvasDesktop?.acceptClose?.();
+                  }
                 }}
                 style={{ backgroundColor: 'var(--primary)', color: '#fff' }}
               >

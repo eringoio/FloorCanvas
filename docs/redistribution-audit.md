@@ -18,6 +18,11 @@ This document records the public-release review of the FloorCanvas project.
   `../THIRD_PARTY_NOTICES.md`.
 - FloorCanvas needs no backend or cloud service: it runs fully offline in the
   browser, as a locally hosted web app, and as an Electron desktop app.
+- No external font service is used at runtime: the application loads no fonts
+  from Google Fonts (or any other network source) and bundles no font
+  binaries; UI and exported documents use local/system font stacks.
+  FloorCanvas itself makes no intentional network request for fonts,
+  telemetry, project storage, or application functionality.
 
 ## Review details
 

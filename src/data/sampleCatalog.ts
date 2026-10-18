@@ -1,6 +1,6 @@
 import type { Project } from '../types/project';
 import { cloneProject } from '../utils/projectValidation';
-import { adaptSampleProjectToCanvas } from '../utils/samplePlanAdapter';
+import { adaptSampleProjectToCanvas } from '../utils/sampleAdapter';
 import smallOffice from './samples/small-office.floormap.json';
 import apartment from './samples/apartment.floormap.json';
 import cafeShop from './samples/cafe-shop.floormap.json';

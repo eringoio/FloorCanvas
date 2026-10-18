@@ -46,10 +46,11 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => 
       svgClone.removeAttribute('style');
 
       const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+      // Local/system font stack only: exported files must not depend on any
+      // external font service or make network requests when opened.
       styleEl.textContent = `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
         text, tspan {
-          font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+          font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", "Meiryo", system-ui, sans-serif;
         }
       `;
       svgClone.insertBefore(styleEl, svgClone.firstChild);

@@ -159,3 +159,80 @@ test('validateWorkspacePath reports missing directories without throwing', () =>
   const ok = storage.validateWorkspacePath(os.tmpdir());
   assert.strictEqual(ok.ok, true);
 });
+
+// ---------------------------------------------------------------------------
+// Symlink / junction escape protection
+// ---------------------------------------------------------------------------
+
+/** Create a directory symlink (junction on Windows); returns false when the platform/privileges do not allow it. */
+function tryCreateDirSymlink(target, linkPath) {
+  try {
+    if (process.platform === 'win32') {
+      // Junctions do not require administrator privileges on Windows.
+      fs.symlinkSync(target, linkPath, 'junction');
+    } else {
+      fs.symlinkSync(target, linkPath, 'dir');
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+test('symlink/junction inside the workspace pointing outside is rejected (where supported)', () => {
+  const ws = makeWorkspace();
+  const outside = makeTempDir('fc-outside-link-');
+  fs.writeFileSync(
+    path.join(outside, 'project.floormap.json'),
+    JSON.stringify({ version: '1.0.0', title: 'Evil Outside Project', unit: 'mm', layers: [], objects: [], backgrounds: [] }),
+    'utf8',
+  );
+
+  const linkPath = path.join(ws, 'evil-link');
+  const created = tryCreateDirSymlink(outside, linkPath);
+  if (!created) {
+    // Symlink creation not permitted in this environment — skip rather than weaken the check.
+    return;
+  }
+
+  // Opening through the link must be denied.
+  assert.throws(() => storage.openProject(ws, linkPath), /outside the workspace/);
+  // Saving through the link must be denied too.
+  assert.throws(
+    () =>
+      storage.saveProject(
+        ws,
+        { id: 'evil-link', folderPath: linkPath, projectPath: path.join(linkPath, 'project.floormap.json'), title: 'Evil' },
+        { version: '1.0.0', title: 'Evil', unit: 'mm', layers: [], objects: [], backgrounds: [] },
+      ),
+    /outside the workspace/,
+  );
+});
+
+test('legitimate normal workspace folders still work with canonicalized checks', () => {
+  const ws = makeWorkspace();
+  // Open by id and by absolute path both work.
+  const byId = storage.openProject(ws, 'Alpha');
+  assert.strictEqual(byId.handle.title, 'Alpha Project');
+  const byPath = storage.openProject(ws, path.join(ws, 'Alpha'));
+  assert.strictEqual(byPath.handle.title, 'Alpha Project');
+  // Save As into a not-yet-existing folder under the workspace works.
+  const saved = storage.saveProjectAs(ws, { title: 'Brand New', unit: 'mm', layers: [], objects: [], backgrounds: [] }, 'Brand New', null);
+  assert.ok(path.relative(ws, saved.folderPath).startsWith('Brand New'));
+});
+
+test('isDirUnderWorkspace canonicalizes symlinks: escape links rejected, real paths pass', () => {
+  const ws = makeWorkspace();
+  const outside = makeTempDir('fc-outside-asset-');
+  const linkPath = path.join(ws, 'escape-link');
+  const created = tryCreateDirSymlink(outside, linkPath);
+  if (!created) {
+    return;
+  }
+  // The canonical containment check must treat the link as outside.
+  assert.strictEqual(storage.isDirUnderWorkspace(ws, linkPath), false);
+  // A real subfolder of the workspace is still inside.
+  assert.strictEqual(storage.isDirUnderWorkspace(ws, path.join(ws, 'Alpha')), true);
+  // The workspace root itself is inside.
+  assert.strictEqual(storage.isDirUnderWorkspace(ws, ws), true);
+});

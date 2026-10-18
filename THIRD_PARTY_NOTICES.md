@@ -25,14 +25,11 @@ https://www.electronjs.org/docs/latest/tutorial/sources#licensing for details.
 
 ## Fonts
 
-| Component | License | Source |
-| --- | --- | --- |
-| Inter | SIL Open Font License 1.1 | Google Fonts |
-| Noto Sans JP | SIL Open Font License 1.1 | Google Fonts |
-
-These fonts are loaded from Google Fonts at runtime, not bundled. A local
-installation (or self-hosting) with the same OFL license is a supported
-alternative.
+No fonts are bundled or fetched at runtime. The UI and exported documents use
+local/system font stacks (`-apple-system`, `Segoe UI`, `Hiragino Sans`,
+`Yu Gothic`, `Meiryo`, etc.; `Inter` and `Noto Sans JP` are honored only if
+already installed locally). FloorCanvas itself makes no network request for
+fonts.
 
 ## Development-time dependencies (not redistributed)
 

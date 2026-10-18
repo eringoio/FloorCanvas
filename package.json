@@ -1,7 +1,7 @@
 {
   "name": "floorcanvas",
   "productName": "FloorCanvas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FloorCanvas — lightweight visual floor-plan and room-layout editor built with React and SVG.",
   "author": "FloorCanvas contributors",
   "license": "MIT",

@@ -10,7 +10,7 @@ import type {
   ShapeObject
 } from '../types/project';
 import { transformObject } from '../utils/transformObjects';
-import { validateProject } from '../utils/projectValidation';
+import { validateProject, ensureValidProject } from '../utils/projectValidation';
 
 // Default layers requested by prompt
 const DEFAULT_LAYERS: Layer[] = [
@@ -1474,6 +1474,6 @@ export const useProjectStore = create<ProjectState>((rawSet) => {
 
 if (typeof window !== 'undefined') {
   (window as any).__store = useProjectStore;
-  (window as any).__projectValidation = { validateProject };
+  (window as any).__projectValidation = { validateProject, ensureValidProject };
 }
 
