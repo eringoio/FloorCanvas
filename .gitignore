@@ -17,6 +17,7 @@ dist-electron
 playwright-report/
 test-results/
 test-results-wsl/
+release/
 
 # Editor directories and files
 .vscode/*

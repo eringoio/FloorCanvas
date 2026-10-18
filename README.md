@@ -4,6 +4,15 @@ FloorCanvas is a lightweight visual floor-plan and room-layout editor built with
 
 Draw and edit floor plans as fully editable vector objects — rooms, walls, doors, windows, furniture, text labels, and dimensions — on a metric sheet with a drawing scale, then export to PNG, SVG, or PDF. FloorCanvas runs as a normal web application, a locally hosted web application, and a Windows desktop application (Electron).
 
+## Download
+
+Ready-to-use packages are published on the [GitHub Releases](https://github.com/eringoio/FloorCanvas/releases) page:
+
+- **Windows desktop (recommended):** `FloorCanvas-<version>-win-x64-portable.exe` — a self-contained portable app; download and run, no installation needed. On first start you choose a Workspace Folder for your projects.
+- **Web build:** `FloorCanvas-<version>-web.zip` — a static build of the browser version. Because browsers block ES modules from `file://`, serve the extracted folder with any static server (e.g. `npx serve .` or `python -m http.server`) and open it locally. The web build keeps everything local: no backend, no account.
+
+You can also run FloorCanvas from source with the commands below.
+
 ## Major features
 
 - **Rooms & walls** — smart rooms with per-side wall thickness/style, walls (straight, rectangular, polyline), columns.
@@ -36,7 +45,7 @@ Serves the same application locally. The web build does not depend on Electron a
 ```bash
 npm run electron:preview   # run the built app in Electron
 npm run electron:pack      # package (unpacked dir)
-npm run electron:dist      # portable Windows x64 build
+npm run electron:dist      # portable Windows x64 build → dist-electron/
 ```
 
 ## Project format
