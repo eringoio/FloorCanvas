@@ -1,0 +1,218 @@
+{
+  "version": "1.0.0",
+  "title": "Small Office (Fictional Sample)",
+  "unit": "mm",
+  "scale": { "status": "calibrated", "pixelsPerUnit": 0.025, "drawingScale": "1:100" },
+  "canvas": { "paperSize": "A3", "orientation": "landscape", "width": 420, "height": 297, "paperUnit": "mm" },
+  "grid": { "visible": true, "snap": true, "size": 500 },
+  "layers": [
+    { "id": "layer_background", "name": "Background Reference", "visible": true, "locked": false, "order": 1 },
+    { "id": "layer_structural_walls", "name": "Structural Walls", "visible": true, "locked": false, "order": 2 },
+    { "id": "layer_internal_walls", "name": "Internal Walls", "visible": true, "locked": false, "order": 3 },
+    { "id": "layer_doors_windows", "name": "Doors and Windows", "visible": true, "locked": false, "order": 4 },
+    { "id": "layer_columns", "name": "Columns", "visible": true, "locked": false, "order": 5 },
+    { "id": "layer_circulation", "name": "Circulation", "visible": true, "locked": false, "order": 6 },
+    { "id": "layer_furniture", "name": "Furniture", "visible": true, "locked": false, "order": 7 },
+    { "id": "layer_labels", "name": "Labels", "visible": true, "locked": false, "order": 8 },
+    { "id": "layer_dimensions", "name": "Dimensions", "visible": true, "locked": false, "order": 9 },
+    { "id": "layer_notes", "name": "Notes", "visible": true, "locked": false, "order": 10 }
+  ],
+  "backgrounds": [],
+  "objects": [
+    {
+      "id": "off_room_reception", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 2600, "y": 3000, "width": 4000, "height": 4000,
+      "name": "Reception", "areaLabel": "16.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "off_open_rec_door", "wall": "bottom", "type": "door", "offset": 1550, "width": 900, "hingeSide": "right", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_rec_win", "wall": "left", "type": "window", "offset": 1200, "width": 1800 }
+      ],
+      "fill": "rgba(148, 163, 184, 0.10)", "stroke": "#64748b"
+    },
+    {
+      "id": "off_room_open_office", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 8300, "y": 3000, "width": 7400, "height": 4000,
+      "name": "Open Office", "areaLabel": "29.6㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "off_open_office_door", "wall": "bottom", "type": "door", "offset": 4200, "width": 1000, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_office_win1", "wall": "top", "type": "window", "offset": 1850, "width": 2200 },
+        { "id": "off_open_office_win2", "wall": "top", "type": "window", "offset": 4850, "width": 2200 }
+      ],
+      "fill": "rgba(59, 130, 246, 0.06)", "stroke": "#3b82f6"
+    },
+    {
+      "id": "off_room_meeting", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 13800, "y": 3000, "width": 3600, "height": 4000,
+      "name": "Meeting Room", "areaLabel": "14.4㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "off_open_meeting_door", "wall": "bottom", "type": "door", "offset": 1350, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_meeting_win", "wall": "top", "type": "window", "offset": 800, "width": 2000 }
+      ],
+      "fill": "rgba(16, 185, 129, 0.06)", "stroke": "#10b981"
+    },
+    {
+      "id": "off_room_corridor", "type": "room", "layerId": "layer_circulation",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 8100, "y": 5500, "width": 15000, "height": 1000,
+      "name": "Corridor", "areaLabel": "", "showLabel": false,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": false, "thickness": 0, "style": "guide" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [],
+      "fill": "none"
+    },
+    {
+      "id": "off_room_private_office", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 2300, "y": 8500, "width": 3400, "height": 5000,
+      "name": "Private Office", "areaLabel": "17.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "off_open_priv_door", "wall": "top", "type": "door", "offset": 1200, "width": 900, "hingeSide": "right", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_priv_win", "wall": "left", "type": "window", "offset": 1600, "width": 1800 }
+      ],
+      "fill": "rgba(245, 158, 11, 0.06)", "stroke": "#f59e0b"
+    },
+    {
+      "id": "off_room_kitchenette", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 5450, "y": 7300, "width": 2900, "height": 2600,
+      "name": "Kitchenette", "areaLabel": "7.5㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "off_open_kitchen_door", "wall": "top", "type": "door", "offset": 1000, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 }
+      ],
+      "fill": "rgba(234, 179, 8, 0.08)", "stroke": "#eab308"
+    },
+    {
+      "id": "off_room_storage", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 5450, "y": 9800, "width": 2900, "height": 2400,
+      "name": "Storage", "areaLabel": "7.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 120, "style": "interior" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "off_open_storage_door", "wall": "top", "type": "door", "offset": 1000, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 }
+      ],
+      "fill": "rgba(100, 116, 139, 0.10)", "stroke": "#64748b"
+    },
+    {
+      "id": "off_room_restroom", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 7900, "y": 8500, "width": 2000, "height": 5000,
+      "name": "Restroom", "areaLabel": "10.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "off_open_rest_door", "wall": "top", "type": "door", "offset": 700, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_rest_win", "wall": "bottom", "type": "window", "offset": 1000, "width": 600 }
+      ],
+      "fill": "rgba(139, 92, 246, 0.06)", "stroke": "#8b5cf6"
+    },
+    {
+      "id": "off_room_lounge", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 12250, "y": 8500, "width": 6700, "height": 5000,
+      "name": "Lounge", "areaLabel": "33.5㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "off_open_lounge_door", "wall": "top", "type": "door", "offset": 1800, "width": 1000, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "off_open_lounge_win1", "wall": "right", "type": "window", "offset": 1200, "width": 2000 },
+        { "id": "off_open_lounge_win2", "wall": "bottom", "type": "window", "offset": 2200, "width": 2200 }
+      ],
+      "fill": "rgba(96, 165, 250, 0.06)", "stroke": "#60a5fa"
+    },
+
+    { "id": "off_col_1", "type": "column", "layerId": "layer_columns", "x": 4600, "y": 1500, "width": 400, "height": 400, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_col_2", "type": "column", "layerId": "layer_columns", "x": 4600, "y": 4500, "width": 400, "height": 400, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "off_desk_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 5800, "y": 2000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 5800, "y": 4000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_3", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 7200, "y": 2000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_4", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 7200, "y": 4000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_5", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 8800, "y": 2000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_6", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 8800, "y": 4000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_7", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 10200, "y": 2000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_desk_8", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 10200, "y": 4000, "width": 700, "height": 900, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "off_conf_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "conference_table", "x": 13800, "y": 2900, "width": 1800, "height": 900, "rotation": 90, "visible": true, "locked": false },
+    { "id": "off_conf_chair_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 13350, "y": 2300, "width": 400, "height": 400, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_conf_chair_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 14350, "y": 2300, "width": 400, "height": 400, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_conf_chair_3", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 13350, "y": 3500, "width": 400, "height": 400, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_conf_chair_4", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 14350, "y": 3500, "width": 400, "height": 400, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_whiteboard", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "whiteboard", "x": 14850, "y": 4300, "width": 2000, "height": 120, "rotation": 90, "visible": true, "locked": false },
+
+    { "id": "off_rec_lobby_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 2900, "y": 2600, "width": 900, "height": 500, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_rec_armchair_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "armchair", "x": 2900, "y": 1900, "width": 850, "height": 850, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_rec_armchair_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "armchair", "x": 2000, "y": 2600, "width": 850, "height": 850, "rotation": 90, "visible": true, "locked": false },
+
+    { "id": "off_priv_desk", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "desk_with_chair", "x": 2300, "y": 9500, "width": 700, "height": 900, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_priv_cabinet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 1000, "y": 7500, "width": 1200, "height": 400, "rotation": 90, "visible": true, "locked": false },
+
+    { "id": "off_kitchen_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "kitchen_sink", "x": 6250, "y": 6350, "width": 600, "height": 500, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_kitchen_cabinet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 4900, "y": 6350, "width": 1000, "height": 400, "rotation": 180, "visible": true, "locked": false },
+
+    { "id": "off_storage_shelf1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 5450, "y": 9200, "width": 1200, "height": 300, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_storage_shelf2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 5450, "y": 10400, "width": 1200, "height": 300, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "off_rest_toilet_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "toilet", "x": 8550, "y": 9300, "width": 450, "height": 650, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_rest_toilet_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "toilet", "x": 8550, "y": 10300, "width": 450, "height": 650, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_rest_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sink", "x": 8550, "y": 10900, "width": 600, "height": 500, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "off_lounge_sofa", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sofa", "x": 12700, "y": 9500, "width": 1800, "height": 850, "rotation": 180, "visible": true, "locked": false },
+    { "id": "off_lounge_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 12700, "y": 10400, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_lounge_armchair", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "armchair", "x": 11300, "y": 10200, "width": 850, "height": 850, "rotation": 90, "visible": true, "locked": false },
+
+    { "id": "off_dim_width", "type": "dimension", "layerId": "layer_dimensions", "x1": 600, "y1": 1000, "x2": 15600, "y2": 1000, "offset": -700, "unit": "mm", "autoValue": 15000, "displayText": "15,000", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+    { "id": "off_dim_depth", "type": "dimension", "layerId": "layer_dimensions", "x1": 15600, "y1": 1000, "x2": 15600, "y2": 11000, "offset": 500, "unit": "mm", "autoValue": 10000, "displayText": "10,000", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "off_note_title", "type": "text", "layerId": "layer_notes", "x": 8100, "y": 700, "text": "FloorCanvas Sample — Small Office (fictional)", "fontSize": 300, "fontFamily": "\"Noto Sans JP\", \"Hiragino Sans\", \"Yu Gothic\", \"Meiryo\", sans-serif", "fontWeight": "600", "align": "center", "rotation": 0, "keepUpright": true, "visible": true, "locked": false, "color": "#334155" }
+  ]
+}

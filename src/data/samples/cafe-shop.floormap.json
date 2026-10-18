@@ -1,0 +1,176 @@
+{
+  "version": "1.0.0",
+  "title": "Café / Small Retail (Fictional Sample)",
+  "unit": "mm",
+  "scale": { "status": "calibrated", "pixelsPerUnit": 0.025, "drawingScale": "1:100" },
+  "canvas": { "paperSize": "A3", "orientation": "landscape", "width": 420, "height": 297, "paperUnit": "mm" },
+  "grid": { "visible": true, "snap": true, "size": 500 },
+  "layers": [
+    { "id": "layer_background", "name": "Background Reference", "visible": true, "locked": false, "order": 1 },
+    { "id": "layer_structural_walls", "name": "Structural Walls", "visible": true, "locked": false, "order": 2 },
+    { "id": "layer_internal_walls", "name": "Internal Walls", "visible": true, "locked": false, "order": 3 },
+    { "id": "layer_doors_windows", "name": "Doors and Windows", "visible": true, "locked": false, "order": 4 },
+    { "id": "layer_columns", "name": "Columns", "visible": true, "locked": false, "order": 5 },
+    { "id": "layer_circulation", "name": "Circulation", "visible": true, "locked": false, "order": 6 },
+    { "id": "layer_furniture", "name": "Furniture", "visible": true, "locked": false, "order": 7 },
+    { "id": "layer_labels", "name": "Labels", "visible": true, "locked": false, "order": 8 },
+    { "id": "layer_dimensions", "name": "Dimensions", "visible": true, "locked": false, "order": 9 },
+    { "id": "layer_notes", "name": "Notes", "visible": true, "locked": false, "order": 10 }
+  ],
+  "backgrounds": [],
+  "objects": [
+    {
+      "id": "cafe_room_entrance", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 2100, "y": 6350, "width": 2400, "height": 5500,
+      "name": "Entrance", "areaLabel": "13.2㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 120, "style": "interior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "cafe_open_street_door", "wall": "left", "type": "opening", "offset": 1800, "width": 1000 }
+      ],
+      "fill": "rgba(148, 163, 184, 0.08)", "stroke": "#64748b"
+    },
+    {
+      "id": "cafe_room_staff", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 2100, "y": 2100, "width": 2400, "height": 3000,
+      "name": "Staff Area / WC", "areaLabel": "7.2㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "cafe_open_staff_door", "wall": "bottom", "type": "door", "offset": 900, "width": 800, "hingeSide": "right", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "cafe_open_staff_win", "wall": "top", "type": "window", "offset": 1000, "width": 1000 },
+        { "id": "cafe_open_staff_left", "wall": "left", "type": "window", "offset": 1200, "width": 600 }
+      ],
+      "fill": "rgba(100, 116, 139, 0.10)", "stroke": "#64748b"
+    },
+    {
+      "id": "cafe_room_customer", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 6000, "y": 4850, "width": 5400, "height": 8500,
+      "name": "Customer Area", "areaLabel": "45.9㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "cafe_open_cust_win1", "wall": "top", "type": "window", "offset": 1000, "width": 1800 },
+        { "id": "cafe_open_cust_win2", "wall": "top", "type": "window", "offset": 3200, "width": 1800 },
+        { "id": "cafe_open_cust_win3", "wall": "bottom", "type": "window", "offset": 1000, "width": 1800 },
+        { "id": "cafe_open_cust_win4", "wall": "bottom", "type": "window", "offset": 3200, "width": 1800 }
+      ],
+      "fill": "rgba(59, 130, 246, 0.05)", "stroke": "#3b82f6"
+    },
+    {
+      "id": "cafe_room_counter", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 9500, "y": 4850, "width": 1600, "height": 8500,
+      "name": "Counter", "areaLabel": "13.6㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "cafe_open_counter_door1", "wall": "left", "type": "opening", "offset": 1100, "width": 1100 },
+        { "id": "cafe_open_counter_door2", "wall": "left", "type": "opening", "offset": 5200, "width": 1100 },
+        { "id": "cafe_open_counter_win", "wall": "top", "type": "window", "offset": 500, "width": 600 }
+      ],
+      "fill": "rgba(245, 158, 11, 0.07)", "stroke": "#f59e0b"
+    },
+    {
+      "id": "cafe_room_kitchen", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 11600, "y": 2600, "width": 2600, "height": 4000,
+      "name": "Kitchen / Prep", "areaLabel": "10.4㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "cafe_open_kitchen_win", "wall": "top", "type": "window", "offset": 1000, "width": 1200 }
+      ],
+      "fill": "rgba(234, 179, 8, 0.08)", "stroke": "#eab308"
+    },
+    {
+      "id": "cafe_room_storage", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 11600, "y": 6850, "width": 2600, "height": 4500,
+      "name": "Storage", "areaLabel": "11.7㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 120, "style": "interior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "cafe_open_storage_door", "wall": "left", "type": "door", "offset": 1750, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "cafe_open_storage_win", "wall": "right", "type": "window", "offset": 1800, "width": 900 }
+      ],
+      "fill": "rgba(139, 92, 246, 0.06)", "stroke": "#8b5cf6"
+    },
+
+    { "id": "cafe_table_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 4500, "y": 2000, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_table_1_chair_l", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 4000, "y": 2000, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_table_1_chair_r", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 5000, "y": 2000, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_table_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 4500, "y": 4400, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_table_2_chair_l", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 4000, "y": 4400, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_table_2_chair_r", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 5000, "y": 4400, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_table_3", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 6800, "y": 2000, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_table_3_chair_l", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 6300, "y": 2000, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_table_3_chair_r", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 7300, "y": 2000, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_table_4", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 6800, "y": 4400, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_table_4_chair_l", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 6300, "y": 4400, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_table_4_chair_r", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 7300, "y": 4400, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_table_5", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 4500, "y": 7000, "width": 900, "height": 900, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_table_5_chair_l", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 4000, "y": 7000, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_table_5_chair_r", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 5000, "y": 7000, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_sofa_bench", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sofa", "x": 7000, "y": 8100, "width": 1800, "height": 850, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_sofa_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 7000, "y": 7200, "width": 700, "height": 500, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "cafe_counter_cabinet_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 9500, "y": 1500, "width": 1000, "height": 400, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_counter_cabinet_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 9500, "y": 2300, "width": 1000, "height": 400, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_counter_register", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 9500, "y": 3200, "width": 900, "height": 400, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "cafe_display_shelf_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 4000, "y": 1000, "width": 1400, "height": 300, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_display_shelf_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 6200, "y": 1000, "width": 1400, "height": 300, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "cafe_kitchen_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "kitchen_sink", "x": 12450, "y": 3400, "width": 600, "height": 500, "rotation": 270, "visible": true, "locked": false },
+    { "id": "cafe_kitchen_counter_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 12450, "y": 1700, "width": 900, "height": 400, "rotation": 270, "visible": true, "locked": false },
+    { "id": "cafe_kitchen_counter_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 12450, "y": 4300, "width": 900, "height": 400, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_storage_shelf_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 12450, "y": 5600, "width": 1200, "height": 300, "rotation": 270, "visible": true, "locked": false },
+    { "id": "cafe_storage_shelf_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 12450, "y": 6300, "width": 1200, "height": 300, "rotation": 270, "visible": true, "locked": false },
+
+    { "id": "cafe_staff_wc_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sink", "x": 2750, "y": 1000, "width": 600, "height": 500, "rotation": 180, "visible": true, "locked": false },
+    { "id": "cafe_staff_wc_toilet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "toilet", "x": 1050, "y": 3100, "width": 450, "height": 650, "rotation": 90, "visible": true, "locked": false },
+    { "id": "cafe_staff_locker", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "locker", "x": 1050, "y": 900, "width": 900, "height": 450, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "cafe_shape_entry_mat", "type": "shape", "shapeType": "rect", "layerId": "layer_notes", "x": 2100, "y": 8300, "width": 1400, "height": 900, "rotation": 0, "visible": true, "locked": false, "stroke": "#94a3b8", "strokeDasharray": "6 4", "fill": "none" },
+    { "id": "cafe_note_mat", "type": "text", "layerId": "layer_notes", "x": 2100, "y": 7700, "text": "Entrance mat", "fontSize": 180, "fontFamily": "\"Noto Sans JP\", \"Hiragino Sans\", \"Yu Gothic\", \"Meiryo\", sans-serif", "fontWeight": "400", "align": "center", "rotation": 0, "keepUpright": true, "visible": true, "locked": false, "color": "#475569" },
+
+    { "id": "cafe_dim_width", "type": "dimension", "layerId": "layer_dimensions", "x1": 900, "y1": 600, "x2": 12900, "y2": 600, "offset": -700, "unit": "mm", "autoValue": 12000, "displayText": "12,000", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+    { "id": "cafe_dim_depth", "type": "dimension", "layerId": "layer_dimensions", "x1": 12900, "y1": 600, "x2": 12900, "y2": 9100, "offset": 500, "unit": "mm", "autoValue": 8500, "displayText": "8,500", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "cafe_note_title", "type": "text", "layerId": "layer_notes", "x": 6900, "y": 300, "text": "FloorCanvas Sample — Café / Small Retail (fictional)", "fontSize": 300, "fontFamily": "\"Noto Sans JP\", \"Hiragino Sans\", \"Yu Gothic\", \"Meiryo\", sans-serif", "fontWeight": "600", "align": "center", "rotation": 0, "keepUpright": true, "visible": true, "locked": false, "color": "#334155" }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "title": "Apartment (Fictional Sample)",
+  "unit": "mm",
+  "scale": { "status": "calibrated", "pixelsPerUnit": 0.025, "drawingScale": "1:100" },
+  "canvas": { "paperSize": "A3", "orientation": "portrait", "width": 297, "height": 420, "paperUnit": "mm" },
+  "grid": { "visible": true, "snap": true, "size": 500 },
+  "layers": [
+    { "id": "layer_background", "name": "Background Reference", "visible": true, "locked": false, "order": 1 },
+    { "id": "layer_structural_walls", "name": "Structural Walls", "visible": true, "locked": false, "order": 2 },
+    { "id": "layer_internal_walls", "name": "Internal Walls", "visible": true, "locked": false, "order": 3 },
+    { "id": "layer_doors_windows", "name": "Doors and Windows", "visible": true, "locked": false, "order": 4 },
+    { "id": "layer_columns", "name": "Columns", "visible": true, "locked": false, "order": 5 },
+    { "id": "layer_circulation", "name": "Circulation", "visible": true, "locked": false, "order": 6 },
+    { "id": "layer_furniture", "name": "Furniture", "visible": true, "locked": false, "order": 7 },
+    { "id": "layer_labels", "name": "Labels", "visible": true, "locked": false, "order": 8 },
+    { "id": "layer_dimensions", "name": "Dimensions", "visible": true, "locked": false, "order": 9 },
+    { "id": "layer_notes", "name": "Notes", "visible": true, "locked": false, "order": 10 }
+  ],
+  "backgrounds": [],
+  "objects": [
+    {
+      "id": "apt_room_entry", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 1400, "y": 3200, "width": 1800, "height": 2400,
+      "name": "Entry", "areaLabel": "4.3㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "apt_open_entry_door", "wall": "bottom", "type": "opening", "offset": 450, "width": 1000 },
+        { "id": "apt_open_entry_closet", "wall": "right", "type": "door", "offset": 700, "width": 800, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 }
+      ],
+      "fill": "rgba(148, 163, 184, 0.10)", "stroke": "#64748b"
+    },
+    {
+      "id": "apt_room_living", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 5200, "y": 4800, "width": 5800, "height": 5600,
+      "name": "Living / Dining", "areaLabel": "32.5㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": false, "thickness": 0, "style": "guide" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "apt_open_living_win1", "wall": "top", "type": "window", "offset": 1500, "width": 2000 },
+        { "id": "apt_open_living_balcony", "wall": "bottom", "type": "opening_window", "offset": 900, "width": 4000 }
+      ],
+      "fill": "rgba(59, 130, 246, 0.05)", "stroke": "#3b82f6"
+    },
+    {
+      "id": "apt_room_kitchen", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 9500, "y": 3200, "width": 2800, "height": 2400,
+      "name": "Kitchen", "areaLabel": "6.7㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 200, "style": "exterior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [
+        { "id": "apt_open_kitchen_win", "wall": "top", "type": "window", "offset": 700, "width": 1400 }
+      ],
+      "fill": "rgba(234, 179, 8, 0.08)", "stroke": "#eab308"
+    },
+    {
+      "id": "apt_room_bedroom", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 9500, "y": 6000, "width": 2800, "height": 3200,
+      "name": "Bedroom", "areaLabel": "9.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 120, "style": "interior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 120, "style": "interior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "apt_open_bedroom_door", "wall": "left", "type": "door", "offset": 1150, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "apt_open_bedroom_win", "wall": "right", "type": "window", "offset": 1100, "width": 1800 }
+      ],
+      "fill": "rgba(16, 185, 129, 0.06)", "stroke": "#10b981"
+    },
+    {
+      "id": "apt_room_study", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 1400, "y": 6000, "width": 1800, "height": 3200,
+      "name": "Study / Guest", "areaLabel": "5.8㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 200, "style": "exterior" }
+      },
+      "openings": [
+        { "id": "apt_open_study_door", "wall": "right", "type": "door", "offset": 1150, "width": 900, "hingeSide": "right", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "apt_open_study_win", "wall": "left", "type": "window", "offset": 700, "width": 1400 }
+      ],
+      "fill": "rgba(139, 92, 246, 0.06)", "stroke": "#8b5cf6"
+    },
+    {
+      "id": "apt_room_bathroom", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 9500, "y": 8800, "width": 2800, "height": 2400,
+      "name": "Bathroom", "areaLabel": "6.7㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": true, "thickness": 120, "style": "interior" },
+        "right": { "visible": true, "thickness": 200, "style": "exterior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "apt_open_bath_door", "wall": "left", "type": "door", "offset": 750, "width": 900, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "apt_open_bath_win", "wall": "bottom", "type": "window", "offset": 1100, "width": 600 }
+      ],
+      "fill": "rgba(96, 165, 250, 0.08)", "stroke": "#60a5fa"
+    },
+    {
+      "id": "apt_room_wc", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 3100, "y": 8800, "width": 1600, "height": 2400,
+      "name": "WC", "areaLabel": "3.8㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "apt_open_wc_door", "wall": "top", "type": "door", "offset": 350, "width": 800, "hingeSide": "right", "swingDirection": "inward", "openingAngle": 90 },
+        { "id": "apt_open_wc_win", "wall": "bottom", "type": "window", "offset": 800, "width": 400 }
+      ],
+      "fill": "rgba(148, 163, 184, 0.12)", "stroke": "#64748b"
+    },
+    {
+      "id": "apt_room_storage", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 4700, "y": 8800, "width": 1600, "height": 2400,
+      "name": "Storage", "areaLabel": "3.8㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 120, "style": "interior" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": true, "thickness": 120, "style": "interior" }
+      },
+      "openings": [
+        { "id": "apt_open_storage_door", "wall": "top", "type": "door", "offset": 350, "width": 800, "hingeSide": "left", "swingDirection": "inward", "openingAngle": 90 }
+      ],
+      "fill": "rgba(100, 116, 139, 0.10)", "stroke": "#64748b"
+    },
+    {
+      "id": "apt_room_hall", "type": "room", "layerId": "layer_circulation",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 6800, "y": 8800, "width": 2600, "height": 2400,
+      "name": "Hall", "areaLabel": "", "showLabel": false,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": false, "thickness": 0, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 200, "style": "exterior" },
+        "left": { "visible": false, "thickness": 0, "style": "guide" }
+      },
+      "openings": [],
+      "fill": "none"
+    },
+    {
+      "id": "apt_room_balcony", "type": "room", "layerId": "layer_structural_walls",
+      "visible": true, "locked": false, "rotation": 0,
+      "x": 5200, "y": 10600, "width": 5800, "height": 1200,
+      "name": "Balcony", "areaLabel": "7.0㎡", "showLabel": true,
+      "walls": {
+        "top": { "visible": false, "thickness": 0, "style": "guide" },
+        "right": { "visible": true, "thickness": 100, "style": "guide" },
+        "bottom": { "visible": true, "thickness": 100, "style": "guide" },
+        "left": { "visible": true, "thickness": 100, "style": "guide" }
+      },
+      "openings": [],
+      "fill": "none", "stroke": "#94a3b8"
+    },
+
+    { "id": "apt_sofa", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sofa", "x": 4000, "y": 3000, "width": 1800, "height": 850, "rotation": 180, "visible": true, "locked": false },
+    { "id": "apt_living_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 4000, "y": 3900, "width": 900, "height": 500, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_dining_table", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "table", "x": 6600, "y": 3200, "width": 1400, "height": 800, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_dining_chair_1", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 6100, "y": 2850, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_dining_chair_2", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 6100, "y": 3550, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+    { "id": "apt_dining_chair_3", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 7100, "y": 2850, "width": 400, "height": 400, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_dining_chair_4", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 7100, "y": 3550, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+    { "id": "apt_kitchen_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "kitchen_sink", "x": 10450, "y": 2450, "width": 600, "height": 500, "rotation": 180, "visible": true, "locked": false },
+    { "id": "apt_kitchen_cabinet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "cabinet", "x": 8900, "y": 2450, "width": 1200, "height": 400, "rotation": 180, "visible": true, "locked": false },
+    { "id": "apt_bed", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "bed", "x": 9700, "y": 6900, "width": 1000, "height": 2000, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_bedroom_closet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "closet", "x": 9500, "y": 4850, "width": 1200, "height": 550, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_study_desk", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "student_desk", "x": 1000, "y": 4900, "width": 700, "height": 450, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_study_chair", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "chair", "x": 1600, "y": 4900, "width": 400, "height": 400, "rotation": 270, "visible": true, "locked": false },
+    { "id": "apt_guest_bed", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "bed", "x": 1400, "y": 7000, "width": 1000, "height": 2000, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_bath_toilet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "toilet", "x": 10450, "y": 8300, "width": 450, "height": 650, "rotation": 180, "visible": true, "locked": false },
+    { "id": "apt_bath_sink", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "sink", "x": 8600, "y": 8300, "width": 600, "height": 500, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_wc_toilet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "toilet", "x": 3450, "y": 9300, "width": 450, "height": 650, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_storage_shelf", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "shelf", "x": 4700, "y": 9300, "width": 1200, "height": 300, "rotation": 90, "visible": true, "locked": false },
+    { "id": "apt_entry_closet", "type": "furniture", "layerId": "layer_furniture", "furnitureType": "closet", "x": 1400, "y": 2500, "width": 900, "height": 550, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "apt_dim_width", "type": "dimension", "layerId": "layer_dimensions", "x1": 500, "y1": 2000, "x2": 10900, "y2": 2000, "offset": -700, "unit": "mm", "autoValue": 10400, "displayText": "10,400", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+    { "id": "apt_dim_depth", "type": "dimension", "layerId": "layer_dimensions", "x1": 10900, "y1": 2000, "x2": 10900, "y2": 11200, "offset": 500, "unit": "mm", "autoValue": 9200, "displayText": "9,200", "textOverride": false, "rotation": 0, "visible": true, "locked": false },
+
+    { "id": "apt_note_title", "type": "text", "layerId": "layer_notes", "x": 5700, "y": 1500, "text": "FloorCanvas Sample — Apartment (fictional)", "fontSize": 300, "fontFamily": "\"Noto Sans JP\", \"Hiragino Sans\", \"Yu Gothic\", \"Meiryo\", sans-serif", "fontWeight": "600", "align": "center", "rotation": 0, "keepUpright": true, "visible": true, "locked": false, "color": "#334155" }
+  ]
+}

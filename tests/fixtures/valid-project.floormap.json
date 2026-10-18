@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "title": "Web Fixture Project",
+  "unit": "mm",
+  "scale": { "status": "calibrated", "pixelsPerUnit": 0.025, "drawingScale": "1:100" },
+  "canvas": { "paperSize": "A4", "orientation": "landscape", "width": 297, "height": 210, "paperUnit": "mm" },
+  "grid": { "visible": true, "snap": true, "size": 500 },
+  "layers": [
+    { "id": "layer_structural_walls", "name": "Structural Walls", "visible": true, "locked": false, "order": 2 },
+    { "id": "layer_labels", "name": "Labels", "visible": true, "locked": false, "order": 8 }
+  ],
+  "backgrounds": [],
+  "objects": [
+    { "id": "fixture_wall_1", "type": "wall", "layerId": "layer_structural_walls", "x1": 1000, "y1": 1000, "x2": 6000, "y2": 1000, "thickness": 200, "rotation": 0, "visible": true, "locked": false, "style": "exterior" },
+    { "id": "fixture_label_1", "type": "text", "layerId": "layer_labels", "x": 3000, "y": 2000, "text": "Fixture Room", "fontSize": 240, "fontWeight": "600", "align": "center", "rotation": 0, "visible": true, "locked": false, "color": "#0f172a" }
+  ]
+}
