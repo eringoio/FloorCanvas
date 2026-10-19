@@ -35,6 +35,15 @@ export const WorkspaceGate: React.FC<WorkspaceGateProps> = ({ children }) => {
   const [error, setError] = React.useState<string | null>(null);
   const [showStartScreen, setShowStartScreen] = React.useState(false);
 
+  // Gate/start-screen states have no editor to protect, so close requests in
+  // this component (before/instead of the editor) can be accepted directly.
+  // The editor registers its own unsaved-changes handler once mounted.
+  React.useEffect(() => {
+    desktop?.onCloseRequested?.(() => {
+      void desktop.acceptClose?.();
+    });
+  }, [desktop]);
+
   React.useEffect(() => {
     let cancelled = false;
     const load = async () => {

@@ -138,9 +138,26 @@ npm run electron:dist
 
 npm run test:e2e        # Playwright end-to-end tests (web mode)
 npm run test:storage    # Node tests for desktop storage/settings layer
+npm run test:electron   # Real-Electron persistence tests (builds first; local/Windows)
+npm run test:all        # lint + storage + build + web E2E + Electron E2E
 ```
 
-GitHub Actions CI (`.github/workflows/ci.yml`) runs lint, build, storage tests, and the Playwright e2e suite on every push/PR to `main`. Releases are built and published manually (see the GitHub Releases page); no release is triggered by a normal push.
+`npm run test:electron` launches the real Electron application through Playwright
+(`_electron`) against disposable temporary workspace/userData directories and
+exercises Save, Save As, Open, last-project restore, background asset
+extraction, close-dialog behavior and startup failure states on the real
+filesystem. It is part of the local regression suite and is not run in the
+Linux CI job.
+
+**Test-only launch hooks.** The automated Electron tests initialize the app
+with an isolated temporary workspace instead of a native folder dialog. This
+is active only when the process is launched with `FLOORCANVAS_E2E=1` plus
+`FLOORCANVAS_E2E_WORKSPACE=<path>` (and optionally
+`FLOORCANVAS_E2E_USER_DATA=<path>`). Validation of that path is exactly the
+same as a production workspace; without the explicit `FLOORCANVAS_E2E=1` flag
+these environment variables do nothing and production behavior is unchanged.
+
+GitHub Actions CI (`.github/workflows/ci.yml`) runs lint, build, storage tests, and the Playwright e2e suite on Ubuntu for every push/PR to `main`, plus a Windows job running lint, build, and the storage tests. Releases are built and published manually (see the GitHub Releases page); no release is triggered by a normal push.
 
 The Vite web build never requires Electron. Electron code lives in `electron/*.cjs`.
 

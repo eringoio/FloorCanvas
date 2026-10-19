@@ -120,6 +120,19 @@ function migrateBase64BackgroundAssets(projectData, projectDir) {
   return migrated;
 }
 
+/**
+ * Resolve an asset reference (e.g. 'assets/bg_1.png') inside a project folder.
+ * Traversal or absolute escapes are rejected with an access-denied error.
+ * Returns the absolute asset path.
+ */
+function resolveAssetAbsolutePath(projectDir, assetPath) {
+  const resolved = path.resolve(projectDir, String(assetPath || ''));
+  if (!isDirUnderWorkspace(projectDir, resolved)) {
+    throw new Error('Access denied: asset path is outside the project folder.');
+  }
+  return resolved;
+}
+
 function readProjectFile(projectFilePath) {
   const raw = fs.readFileSync(projectFilePath, 'utf8');
   return JSON.parse(raw);
@@ -162,9 +175,14 @@ function listProjects(workspacePath) {
  * Returns { handle, data } or throws when invalid.
  */
 function openProject(workspacePath, folderPathOrId) {
-  const projectDir = isDirUnderWorkspace(workspacePath, folderPathOrId)
-    ? path.resolve(folderPathOrId)
-    : path.resolve(path.join(workspacePath, String(folderPathOrId || '')));
+  // First determine what kind of input was supplied. An absolute path is used
+  // as-is; anything else is treated as a project folder ID/name relative to
+  // the workspace root. Containment is then verified with canonical paths.
+  const input = String(folderPathOrId || '');
+
+  const projectDir = path.isAbsolute(input)
+    ? path.resolve(input)
+    : path.resolve(workspacePath, input);
 
   if (!isDirUnderWorkspace(workspacePath, projectDir)) {
     throw new Error('Access denied: path is outside the workspace.');
@@ -296,6 +314,7 @@ module.exports = {
   saveProject,
   saveProjectAs,
   validateWorkspacePath,
+  resolveAssetAbsolutePath,
   migrateBase64BackgroundAssets,
   readProjectFile,
   writeProjectAtomic,

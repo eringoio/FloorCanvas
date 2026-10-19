@@ -17,6 +17,7 @@ dist-electron
 playwright-report/
 test-results/
 test-results-wsl/
+test-results-electron/
 release/
 
 # Editor directories and files

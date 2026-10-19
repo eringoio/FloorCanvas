@@ -10,6 +10,22 @@ const devServerUrl = process.env.VITE_DEV_SERVER_URL || 'http://127.0.0.1:5173';
 
 app.commandLine.appendSwitch('disable-gpu');
 
+// --- Test-only E2E infrastructure (inert in production) ---------------------
+// Activated exclusively by FLOORCANVAS_E2E=1, which automated tests set.
+// Production runs never set it, so behavior is unchanged: the workspace still
+// comes from the settings file (or user selection) and userData stays default.
+const isE2E = process.env.FLOORCANVAS_E2E === '1';
+const e2eWorkspacePath = isE2E ? process.env.FLOORCANVAS_E2E_WORKSPACE || null : null;
+const e2eUserDataPath = isE2E ? process.env.FLOORCANVAS_E2E_USER_DATA || null : null;
+
+if (isE2E && e2eUserDataPath) {
+  // Isolated Electron settings/userData for test runs; must be set before
+  // the app is ready so settings load reads the isolated directory.
+  app.setPath('userData', path.resolve(e2eUserDataPath));
+}
+// -----------------------------------------------------------------------------
+
+
 // Register custom protocol to safely load local project assets
 protocol.registerSchemesAsPrivileged([
   { scheme: 'floorcanvas-asset', privileges: { bypassCSP: true, secure: true, supportFetchAPI: true, corsEnabled: true } }
@@ -108,6 +124,17 @@ function createWindow() {
 
 app.whenReady().then(() => {
   settingsState = settings.loadSettings(app);
+
+  // Test-only: initialize the workspace from an explicitly supplied path,
+  // validated exactly like a production workspace (must exist as a directory).
+  if (isE2E && e2eWorkspacePath) {
+    const e2eValidation = storage.validateWorkspacePath(path.resolve(e2eWorkspacePath));
+    if (e2eValidation.ok) {
+      settingsState = settings.updateSettings(app, { workspacePath: e2eValidation.resolved });
+    } else {
+      console.error(`FLOORCANVAS_E2E_WORKSPACE is invalid (${e2eValidation.reason}); keeping settings value.`);
+    }
+  }
 
   // Register asset protocol handler. Only files inside the current workspace
   // are ever served — the renderer cannot fetch arbitrary local files.
@@ -323,10 +350,7 @@ ipcMain.handle('assets:resolve-url', async (_event, projectHandle, assetPath) =>
   if (!storage.isDirUnderWorkspace(workspacePath, projectDir)) {
     throw new Error('Access denied: asset path is outside the workspace.');
   }
-  const fullAssetPath = path.resolve(projectDir, assetPath);
-  if (!storage.isDirUnderWorkspace(projectDir, fullAssetPath)) {
-    throw new Error('Access denied: asset path is outside the project folder.');
-  }
+  const fullAssetPath = storage.resolveAssetAbsolutePath(projectDir, assetPath);
 
   if (!fs.existsSync(fullAssetPath)) {
     return null;

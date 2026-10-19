@@ -147,6 +147,43 @@ test.describe('Project validation (untrusted .floormap.json input)', () => {
     expect((result as any).project.backgrounds).toEqual([]);
   });
 
+  test('null / array / primitive documents are rejected without crashing', async ({ page }) => {
+    await openPage(page);
+    for (const bad of [null, [], 42, 'project', true]) {
+      const result = await validate(page, bad);
+      expect(result.valid, `input: ${JSON.stringify(bad)}`).toBe(false);
+      const ensure = await ensureValid(page, bad);
+      expect(ensure.ok, `ensureValid input: ${JSON.stringify(bad)}`).toBe(false);
+    }
+    // Explicit sparse/document-level shapes.
+    expect((await validate(page, [])).valid).toBe(false);
+    expect((await validate(page, {})).valid, 'empty object is missing all fields').toBe(false);
+  });
+
+  test('empty objects array is structurally valid, primitives inside are not', async ({ page }) => {
+    await openPage(page);
+    expect((await validate(page, { ...VALID_FIXTURE, objects: [] })).valid).toBe(true);
+    expect((await validate(page, { ...VALID_FIXTURE, objects: [123] })).valid).toBe(false);
+    expect((await validate(page, { ...VALID_FIXTURE, objects: [[1, 2]] })).valid).toBe(false);
+  });
+
+  test('malformed background entries are rejected', async ({ page }) => {
+    await openPage(page);
+    expect((await validate(page, { ...VALID_FIXTURE, backgrounds: [null] })).valid).toBe(false);
+    expect((await validate(page, { ...VALID_FIXTURE, backgrounds: [{ type: 'background' }] })).valid, 'missing id').toBe(false);
+    expect((await validate(page, { ...VALID_FIXTURE, backgrounds: [{ id: 'bg_1', type: 42 }] })).valid).toBe(false);
+    expect((await validate(page, { ...VALID_FIXTURE, backgrounds: [{ id: 'bg_1', type: 'background' }] })).valid).toBe(true);
+  });
+
+  test('missing title is required and reported', async ({ page }) => {
+    await openPage(page);
+    const broken = { ...VALID_FIXTURE } as Record<string, unknown>;
+    delete broken.title;
+    const result = await validate(page, broken);
+    expect(result.valid).toBe(false);
+    expect(result.missing).toContain('title');
+  });
+
   test('saved editor project still passes validation', async ({ page }) => {
     await openPage(page);
     const project = await page.evaluate(() => JSON.parse(JSON.stringify((window as any).__store.getState().project)));

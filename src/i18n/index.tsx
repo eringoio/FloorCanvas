@@ -23,8 +23,13 @@ function detectInitialLanguage(): LanguageCode {
     ? navigator.languages
     : [navigator.language];
 
-  if (browserLanguages.some((lang) => lang.toLowerCase().startsWith('ja'))) {
-    return 'ja';
+  // Accept-language style negotiation: the first browser preference that maps
+  // to a supported language wins (e.g. en-US → en). Later preferences are
+  // fallbacks only and never override the primary language.
+  for (const raw of browserLanguages) {
+    const lang = raw.toLowerCase().split(/[-_]/)[0];
+    if (lang === 'ja') return 'ja';
+    if (lang === 'en') return 'en';
   }
 
   return 'en';

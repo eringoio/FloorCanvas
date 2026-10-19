@@ -2,6 +2,10 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
+  // Real-Electron suites live in tests/electron and run via
+  // playwright.electron.config.ts (`npm run test:electron`).
+  testMatch: ['**/*.spec.ts'],
+  testIgnore: ['**/electron/**'],
   outputDir: 'test-results-wsl',
   timeout: 30_000,
   expect: {

@@ -15,6 +15,8 @@
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:storage": "node --test tests-node/storage/storage.test.cjs",
+    "test:electron": "npm run build && playwright test --config playwright.electron.config.ts",
+    "test:all": "npm run lint && npm run test:storage && npm run build && npm run test:e2e && npm run test:electron",
     "electron:dev": "concurrently -k \"npm run dev -- --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && cross-env ELECTRON_DEV=true electron .\"",
     "electron:preview": "npm run build && cross-env ELECTRON_DEV=false electron .",
     "electron:pack": "npm run build && electron-builder --dir",

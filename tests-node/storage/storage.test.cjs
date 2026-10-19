@@ -58,8 +58,48 @@ test('openProject rejects paths outside the workspace', () => {
   const ws = makeWorkspace();
   const outside = makeTempDir('fc-outside-');
   assert.throws(() => storage.openProject(ws, outside), /outside the workspace/);
-  assert.throws(() => storage.openProject(ws, '../..'), /outside the workspace|Project file not found/);
+  assert.throws(() => storage.openProject(ws, '../..'), /outside the workspace/);
+  // Traversal that lands back inside the workspace resolves normally.
+  const realWs = fs.realpathSync(ws);
+  assert.doesNotThrow(() => storage.openProject(ws, path.join('..', path.basename(realWs), 'Alpha')));
 });
+
+test('openProject distinguishes IDs and absolute paths in both directions', () => {
+  const ws = makeWorkspace();
+  const outside = makeTempDir('fc-outside-dir-');
+  fs.writeFileSync(
+    path.join(outside, 'project.floormap.json'),
+    JSON.stringify({ version: '1.0.0', title: 'Outside', unit: 'mm', layers: [], objects: [], backgrounds: [] }),
+    'utf8',
+  );
+
+  // Project ID resolves into the workspace (never joins malformed nested paths
+  // that could accidentally bypass the containment check).
+  const byId = storage.openProject(ws, 'Alpha');
+  assert.strictEqual(byId.handle.folderPath, path.join(fs.realpathSync(ws), 'Alpha'));
+
+  // Absolute path inside the workspace opens without being treated as an ID.
+  const byPath = storage.openProject(ws, path.join(ws, 'Alpha'));
+  assert.strictEqual(byPath.handle.title, 'Alpha Project');
+
+  // Absolute path outside the workspace is rejected immediately.
+  assert.throws(() => storage.openProject(ws, outside), /outside the workspace/);
+
+  // Relative traversal above the workspace root is rejected.
+  assert.throws(() => storage.openProject(ws, '..'), /outside the workspace/);
+  assert.throws(() => storage.openProject(ws, path.join('..', 'evil')), /outside the workspace/);
+});
+
+test('openProject rejects drive-style and root-style escapes on every platform', () => {
+  const ws = makeWorkspace();
+  if (process.platform === 'win32') {
+    // Absolute drive root outside the workspace.
+    assert.throws(() => storage.openProject(ws, 'C:\\Temp\\Outside'), /outside the workspace/);
+  } else {
+    assert.throws(() => storage.openProject(ws, '/etc'), /outside the workspace/);
+  }
+});
+
 
 test('saveProject writes project.floormap.json atomically', () => {
   const ws = makeWorkspace();
@@ -236,3 +276,44 @@ test('isDirUnderWorkspace canonicalizes symlinks: escape links rejected, real pa
   // The workspace root itself is inside.
   assert.strictEqual(storage.isDirUnderWorkspace(ws, ws), true);
 });
+
+// ---------------------------------------------------------------------------
+// Asset path escape protection
+// ---------------------------------------------------------------------------
+
+test('resolveAssetAbsolutePath rejects traversal and absolute escapes', () => {
+  const projectDir = path.join(makeWorkspace(), 'Alpha');
+
+  // Normal asset reference resolves inside the project folder.
+  const ok = storage.resolveAssetAbsolutePath(projectDir, 'assets/bg_1.png');
+  assert.strictEqual(path.basename(ok), 'bg_1.png');
+  assert.ok(path.relative(realpath(projectDir), ok) !== '..', `resolved inside project: ${ok}`);
+
+  // Traversal escapes are rejected.
+  assert.throws(() => storage.resolveAssetAbsolutePath(projectDir, '../outside.png'), /outside the project folder/);
+  assert.throws(() => storage.resolveAssetAbsolutePath(projectDir, path.join('..', '..', 'evil.png')), /outside the project folder/);
+  // Absolute paths outside the project folder are rejected.
+  assert.throws(() => storage.resolveAssetAbsolutePath(projectDir, makeTempDir('fc-asset-abs-')), /outside the project folder/);
+  // Platform-absolute paths must not smuggle a full filesystem path.
+  if (process.platform === 'win32') {
+    assert.throws(() => storage.resolveAssetAbsolutePath(projectDir, 'C:\\Windows\\evil.png'), /outside the project folder/);
+  }
+  assert.throws(() => storage.resolveAssetAbsolutePath(projectDir, '/etc/passwd'), /outside the project folder/);
+});
+
+function realpath(p) {
+  return fs.realpathSync(p);
+}
+
+test('resolveAssetAbsolutePath rejects symlink/junction asset escapes (where supported)', () => {
+  const projectDir = path.join(makeWorkspace(), 'Alpha');
+  fs.mkdirSync(path.join(projectDir, 'assets'), { recursive: true });
+  const outside = makeTempDir('fc-asset-link-');
+  fs.writeFileSync(path.join(outside, 'evil.png'), Buffer.from([0]), 'utf8');
+  const linkPath = path.join(projectDir, 'assets', 'evil-link.png');
+  const created = tryCreateDirSymlink(outside, linkPath);
+  if (!created) return;
+  // Resolution through the junction points outside → rejected.
+  assert.strictEqual(storage.isDirUnderWorkspace(projectDir, linkPath), false);
+});
+
